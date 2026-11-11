@@ -50,13 +50,19 @@ async def main() -> None:
                   r["code"] == 0, f"sources={len(r['data']['sources'])}(语义断言跳过)")
 
         # ---- Agent 写操作：自然语言写跟进（Mock规则触发真实落库）----
+        # 自包含：先创建客户再让Agent写跟进，不依赖种子数据
+        r = (await c.post(f"{BASE}/api/customers",
+                          json={"name": "Agent写跟进测试客户"})).json()
+        cid = r["data"]["customer"]["id"]
         r = (await c.post(f"{BASE}/api/agent/chat",
-                          json={"message": "帮客户1记录一下跟进：电话回访，确认预算"})).json()
+                          json={"message": f"帮客户{cid}记录一下跟进：电话回访，确认预算"})).json()
         used_tool = any(s["tool"] == "create_follow_up" and s["status"] == "ok"
                         for s in r["data"]["steps"])
         check("Agent写跟进(真实落库)", used_tool)
-        r = (await c.get(f"{BASE}/api/customers/1/follow_ups")).json()
-        check("跟进已入库", any("电话回访" in f["content"] for f in r["data"]["items"]))
+        r = (await c.get(f"{BASE}/api/customers/{cid}/follow_ups")).json()
+        check("跟进已入库",
+              r["code"] == 0 and any("电话回访" in f["content"] for f in r["data"]["items"]))
+        await c.delete(f"{BASE}/api/customers/{cid}")
 
         # ---- 成交工作流：PATCH won 触发答谢话术 ----
         r = (await c.post(f"{BASE}/api/customers",
