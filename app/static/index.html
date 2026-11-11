@@ -165,6 +165,11 @@
                 <option value="768x512">768×512 横版</option>
                 <option value="1024x1024">1024×1024（SDXL）</option>
               </select>
+              <select id="aigc-steps">
+                <option value="12">12步·快</option>
+                <option value="20" selected>20步·均衡</option>
+                <option value="30">30步·精</option>
+              </select>
               <button class="btn" id="aigc-btn" onclick="generateImage()">生成图片</button>
             </div>
           </div>
@@ -343,7 +348,7 @@ async function generateImage(){
   try{
     const d = await post('/api/aigc/text2image', {
       prompt, negative: document.getElementById('aigc-negative').value.trim(),
-      width: w, height: h,
+      width: w, height: h, steps: Number(document.getElementById('aigc-steps').value),
     });
     document.getElementById('aigc-pending').remove();
     box.insertAdjacentHTML('afterbegin',

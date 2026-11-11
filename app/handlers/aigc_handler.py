@@ -30,6 +30,7 @@ class AigcText2ImageHandler(BaseHandler):
             negative=body.get("negative", ""),
             width=self.to_int(body.get("width", 1024), 1024, "width"),
             height=self.to_int(body.get("height", 1024), 1024, "height"),
+            steps=min(max(self.to_int(body.get("steps", 20), 20, "steps"), 4), 50),
             checkpoint=body.get("checkpoint") or CONFIG.comfyui_checkpoint,
         )
         # 磁盘路径 data/aigc/x.png -> Web路径 /aigc/x.png
