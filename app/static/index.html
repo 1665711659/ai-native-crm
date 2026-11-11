@@ -156,7 +156,17 @@
         <div id="aigc-panel" style="display:none">
           <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px" id="aigc-status">ComfyUI 状态检测中...</div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <input id="aigc-prompt" type="text" placeholder="提示词，如：现代科技风CRM产品宣传海报，蓝色主题">
+            <div style="font-size:11px;color:var(--warn);background:#fdf6ec;padding:6px 8px;border-radius:6px">
+              ⚠ SD1.5 原版模型只懂英文提示词。建议结构：<b>主体 + 风格 + 光影 + 画质词</b>，可从下方模板改。
+            </div>
+            <select id="aigc-tpl" onchange="fillTpl()">
+              <option value="">— 选择提示词模板（英文）—</option>
+              <option value="fresh fruit juice in a glass, strawberries and oranges, condensation drops, bright summer lighting, commercial product photography, high quality, detailed">🍹 果汁饮品海报</option>
+              <option value="modern CRM software dashboard on laptop screen, blue technology style, clean minimal office background, professional product poster, high quality, detailed">💻 软件产品海报</option>
+              <option value="delicious coffee latte art on wooden table, warm morning sunlight, cozy cafe atmosphere, food photography, shallow depth of field, high quality">☕ 咖啡美食图</option>
+              <option value="futuristic technology abstract background, blue and purple gradient, glowing particles, network connections, clean design, 8k wallpaper">🌌 科技感背景</option>
+            </select>
+            <input id="aigc-prompt" type="text" placeholder="English prompt, e.g. fresh fruit juice, summer light, product photography, high quality">
             <input id="aigc-negative" type="text" placeholder="负面提示词（可空）">
             <div style="display:flex;gap:8px;align-items:center">
               <select id="aigc-size">
@@ -327,6 +337,10 @@ function switchTab(m){
 }
 
 /* ---------- AIGC 文生图 ---------- */
+function fillTpl(){
+  const v = document.getElementById('aigc-tpl').value;
+  if (v) document.getElementById('aigc-prompt').value = v;
+}
 async function loadAigcStatus(){
   const el = document.getElementById('aigc-status');
   try{
