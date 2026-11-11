@@ -3,7 +3,7 @@ from app.handlers.agent_handler import AgentChatHandler
 from app.handlers.base import BaseHandler, HealthHandler
 from app.handlers.customer_handler import (CustomerDetailHandler,
                                            CustomerListHandler,
-                                           FollowUpListHandler)
+                                           FollowUpListHandler, StatsHandler)
 from app.handlers.rag_handler import (RAGDocumentListHandler,
                                       RAGIndexHandler, RAGQueryHandler)
 from app.handlers.workflow_handler import WorkflowTriggerHandler
@@ -11,6 +11,7 @@ from app.handlers.workflow_handler import WorkflowTriggerHandler
 __all__ = [
     "BaseHandler", "HealthHandler",
     "CustomerListHandler", "CustomerDetailHandler", "FollowUpListHandler",
+    "StatsHandler",
     "RAGQueryHandler", "RAGIndexHandler", "RAGDocumentListHandler",
     "AgentChatHandler", "WorkflowTriggerHandler",
 ]

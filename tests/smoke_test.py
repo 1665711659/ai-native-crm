@@ -25,6 +25,15 @@ async def main() -> None:
         check("健康检查", r["code"] == 0 and r["data"]["service"] == "ai-native-crm",
               f"db={r['data']['db_backend']}, llm={r['data']['llm_mode']}")
 
+        # 1.1 可视化管理台（根路径返回前端页面）
+        r = await c.get(f"{BASE}/")
+        check("管理台首页(/)", r.status_code == 200 and "AI 原生 CRM" in r.text)
+
+        # 1.2 销售漏斗统计
+        r = (await c.get(f"{BASE}/api/stats")).json()
+        check("统计接口(/api/stats)",
+              r["code"] == 0 and len(r["data"]["by_status"]) == 5)
+
         # 2. 创建客户（自动触发工作流生成破冰话术）
         r = (await c.post(f"{BASE}/api/customers", json={
             "name": "冒烟测试客户", "company": "测试科技有限公司",

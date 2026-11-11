@@ -58,6 +58,13 @@ class CustomerDetailHandler(BaseHandler):
         self.ok({"deleted": True})
 
 
+class StatsHandler(BaseHandler):
+    """GET /api/stats —— 销售漏斗统计（前端管理台看板用）。"""
+
+    async def get(self) -> None:
+        self.ok(await self.ctx.customers.stats())
+
+
 class FollowUpListHandler(BaseHandler):
     """GET/POST /api/customers/{id}/follow_ups"""
 

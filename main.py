@@ -28,9 +28,19 @@ from app.db.database import Database  # noqa: E402
 from app.handlers import (AgentChatHandler, CustomerDetailHandler,  # noqa: E402
                           CustomerListHandler, FollowUpListHandler, HealthHandler,
                           RAGDocumentListHandler, RAGIndexHandler, RAGQueryHandler,
-                          WorkflowTriggerHandler)
+                          StatsHandler, WorkflowTriggerHandler)
 from app.services.customer_service import CustomerService  # noqa: E402
 from config import CONFIG  # noqa: E402
+
+STATIC_DIR = Path(__file__).parent / "app" / "static"
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    """GET / —— 可视化管理台（单文件前端，见 app/static/index.html）。"""
+
+    async def get(self) -> None:
+        self.set_header("Content-Type", "text/html; charset=utf-8")
+        self.finish((STATIC_DIR / "index.html").read_bytes())
 
 logging.basicConfig(
     level=logging.DEBUG if CONFIG.debug else logging.INFO,
@@ -39,11 +49,14 @@ logging.basicConfig(
 logger = logging.getLogger("main")
 
 ROUTES = [
+    (r"/", IndexHandler),
+    (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": STATIC_DIR}),
     (r"/api/health", HealthHandler),
     # ---- 客户 / 跟进 ----
     (r"/api/customers", CustomerListHandler),
     (r"/api/customers/(\d+)", CustomerDetailHandler),
     (r"/api/customers/(\d+)/follow_ups", FollowUpListHandler),
+    (r"/api/stats", StatsHandler),
     # ---- RAG 知识库 ----
     (r"/api/rag/query", RAGQueryHandler),
     (r"/api/rag/index", RAGIndexHandler),
