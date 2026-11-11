@@ -25,7 +25,7 @@ jobs:
           python main.py &
           sleep 6
 
-      - name: Smoke tests (full pipeline: CRUD/RAG/Agent/Workflow)
+      - name: Smoke tests (full pipeline - CRUD/RAG/Agent/Workflow)
         run: python tests/smoke_test.py
 
       - name: Edge tests (error paths, concurrency, agent self-healing)
