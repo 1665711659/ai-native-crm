@@ -1,5 +1,6 @@
 # AI原生CRM（AI-Native CRM）
 
+> 这只是个demo 别直接上手就用，我只是整合了这些技术，该搭框架搭框架，还有n8n，Coze，dify，在另外一套里面，下面有跟其他开源的同类型对比，别上手就用，别上手就用，别上手就用
 > Python + Tornado + PostgreSQL/MySQL + NumPy，实现 **RAG、Agent + Tool Calling、Workflow Automation**，
 > 预留 **ComfyUI / TTS / ASR / FFmpeg** AIGC 能力与 **Playwright / Browser-use / Airtest** 数字员工扩展。
 
