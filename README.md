@@ -1,6 +1,5 @@
 # AI原生CRM（AI-Native CRM）
 
-> 面向「高级AI应用开发工程师」岗位的项目演示：以 AI 为核心引擎的下一代客户关系管理系统。
 > Python + Tornado + PostgreSQL/MySQL + NumPy，实现 **RAG、Agent + Tool Calling、Workflow Automation**，
 > 预留 **ComfyUI / TTS / ASR / FFmpeg** AIGC 能力与 **Playwright / Browser-use / Airtest** 数字员工扩展。
 
