@@ -88,10 +88,11 @@ class MockLLMClient:
         tool_msgs = [m for m in messages if m.get("role") == "tool"]
         if tool_msgs:
             summary = "\n\n".join(
-                f"· 调用 [{m.get('name', 'tool')}] -> {m.get('content', '')}" for m in tool_msgs
+                f"· {self._friendly_summary(m.get('name', 'tool'), m.get('content', ''))}"
+                for m in tool_msgs
             )
             return ChatResult(
-                content=f"[Mock LLM 演示回复] 已通过工具获取真实数据：\n{summary}\n\n"
+                content=f"[Mock LLM 演示回复] 已通过工具获取真实数据：\n\n{summary}\n\n"
                         f"提示：在 .env 配置 LLM_API_KEY 后，将由此模型智能总结并回答。"
             )
 
@@ -121,6 +122,57 @@ class MockLLMClient:
         )
 
     # ------------------------------------------------------------------
+    @staticmethod
+    def _friendly_summary(tool_name: str, content: str) -> str:
+        """把工具返回的 JSON 转成人类可读的一句话描述（离线演示模式）。
+
+        真实 LLM 模式下由大模型自行总结，不走此逻辑。
+        """
+        try:
+            data = json.loads(content)
+        except (json.JSONDecodeError, TypeError):
+            return f"调用 [{tool_name}] -> {content[:120]}"
+
+        if tool_name == "search_customers" and isinstance(data, dict):
+            rows = data.get("customers") or []
+            if not rows:
+                return "搜索完成：没有找到匹配的客户。"
+            lines = [f"搜索完成，找到 {len(rows)} 家客户："]
+            for r in rows[:5]:
+                lines.append(
+                    f"  {r.get('id')}. {r.get('name')}（{r.get('company') or '个人客户'}）"
+                    f" · {r.get('status_label') or r.get('status')} · 金额 ¥{r.get('value', 0):,.0f}"
+                )
+            return "\n".join(lines)
+
+        if tool_name == "get_customer_detail" and isinstance(data, dict):
+            c = data.get("customer") or data
+            lines = [
+                f"客户档案：{c.get('name')}（{c.get('company') or '个人客户'}）"
+                f" · {c.get('status_label') or c.get('status')} · 金额 ¥{c.get('value', 0):,.0f}"
+            ]
+            fups = data.get("follow_ups") or []
+            if fups:
+                lines.append(f"  近 {len(fups)} 条跟进：")
+                for f in fups[:3]:
+                    lines.append(f"  · [{str(f.get('created_at'))[:16]}] {f.get('content')}")
+            return "\n".join(lines)
+
+        if tool_name == "create_follow_up":
+            return f"跟进已记录（ID: {data.get('id') or data.get('follow_up_id', '?')}）。"
+
+        if tool_name == "get_sales_stats" and isinstance(data, dict):
+            funnel = data.get("by_status") or []
+            parts = "，".join(
+                f"{r.get('status_label') or r.get('status')} {r.get('count', 0)}家" for r in funnel
+            )
+            return (
+                f"销售统计：共 {data.get('total_customers', '?')} 家客户，"
+                f"总金额 ¥{data.get('total_value', 0):,.0f}。漏斗分布：{parts}"
+            )
+
+        return f"调用 [{tool_name}] 完成。"
+
     @staticmethod
     def _extract_id(text: str) -> Optional[int]:
         m = re.search(r"(?:ID|id|编号|#)\s*(\d+)|(\d{1,6})", text)

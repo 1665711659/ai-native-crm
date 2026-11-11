@@ -166,7 +166,7 @@
               <option value="delicious coffee latte art on wooden table, warm morning sunlight, cozy cafe atmosphere, food photography, shallow depth of field, high quality">☕ 咖啡美食图</option>
               <option value="futuristic technology abstract background, blue and purple gradient, glowing particles, network connections, clean design, 8k wallpaper">🌌 科技感背景</option>
             </select>
-            <input id="aigc-prompt" type="text" placeholder="English prompt, e.g. fresh fruit juice, summer light, product photography, high quality">
+            <input id="aigc-prompt" type="text" placeholder="支持中文，如：一杯果汁，夏天阳光，产品摄影，高清">
             <input id="aigc-negative" type="text" placeholder="负面提示词（可空）">
             <div style="display:flex;gap:8px;align-items:center">
               <select id="aigc-size">
@@ -365,7 +365,8 @@ async function generateImage(){
       width: w, height: h, steps: Number(document.getElementById('aigc-steps').value),
     });
     document.getElementById('aigc-pending').remove();
-    box.insertAdjacentHTML('afterbegin',
+    const tr = d.translated ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">🌐 实际使用提示词（${esc(d.translate_note||'')}）：${esc(d.translated)}</div>` : '';
+    box.insertAdjacentHTML('afterbegin', tr +
       d.files.map(u=>`<a href="${u}" target="_blank"><img src="${u}" style="width:100%;border-radius:8px;margin-bottom:8px"></a>`).join(''));
   }catch(e){
     document.getElementById('aigc-pending').remove();
