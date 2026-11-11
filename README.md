@@ -133,6 +133,16 @@ python main.py                       # 启动，默认 http://127.0.0.1:8888
 - 中栏：客户详情、阶段流转（改为「已成交」自动触发答谢工作流）、跟进记录增删
 - 右栏：AI 销售助理对话（可视化 Tool Calling 执行轨迹）+ 知识库问答（带来源引用）+ AIGC 文生图（直连本机 ComfyUI，ComfyUI 启动后状态灯变绿即可生图）
 
+**界面截图**：
+
+![管理台：漏斗统计 + 客户详情 + AIGC 中文提示词文生图](docs/screenshots/dashboard-aigc.png)
+
+*左：销售漏斗与客户管理；右：AIGC 文生图页签——中文提示词自动翻译为英文 SD prompt，直连本机 ComfyUI 出图。*
+
+![管理台：Agent 对话与知识库问答](docs/screenshots/dashboard-agent-rag.png)
+
+*右栏上：AI 销售助理自然语言查客户（工具执行后返回可读结果，非原始 JSON）；右栏下：RAG 知识库问答（检索内置销售话术 SOP，带来源引用）。*
+
 ### 4.3 启用真实 LLM（推荐）
 
 复制 `.env.example` 为 `.env`，配置任意 OpenAI 兼容平台：
