@@ -1,0 +1,25 @@
+# ============================================================
+# AI原生CRM 依赖清单
+# 核心依赖（MVP 必装，均可直接 pip 安装）
+# ============================================================
+tornado>=6.4          # Web 服务框架（API层）
+numpy>=1.26           # 向量检索 / 数值计算（RAG）
+httpx>=0.27           # 异步 HTTP 客户端（LLM / ComfyUI 调用）
+aiosqlite>=0.20       # SQLite 异步驱动（开箱即用的演示数据库）
+python-dotenv>=1.0    # .env 配置加载
+
+# 生产数据库（切换 MySQL 时安装；SQLite 演示模式无需安装）
+aiomysql>=0.2         # MySQL 异步驱动
+cryptography>=42.0    # aiomysql caching_sha2_password 认证所需
+
+# ============================================================
+# 扩展依赖（按需安装，对应 app/ai/aigc 与 app/ai/digital_employee）
+# ============================================================
+# --- AIGC ---
+# edge-tts>=6.1        # 免费TTS（app/ai/aigc/tts.py）
+# openai-whisper       # 本地ASR（app/ai/aigc/asr.py，亦可改接云端ASR API）
+
+# --- 数字员工：浏览器/安卓自动化 ---
+# playwright>=1.45     # 浏览器自动化（安装后需执行: playwright install chromium）
+# browser-use          # LLM 驱动的自主浏览器 Agent
+# airtest>=1.7         # Android 自动化（需配合设备/模拟器）
