@@ -41,6 +41,8 @@ class Config:
 
         # ---------- AIGC ----------
         self.comfyui_url: str = os.getenv("COMFYUI_URL", "http://127.0.0.1:8188").rstrip("/")
+        # 本机 ComfyUI/models/checkpoints 下实际存在的模型名
+        self.comfyui_checkpoint: str = os.getenv("COMFYUI_CHECKPOINT", "sd_xl_base_1.0.safetensors")
         self.ffmpeg_path: str = os.getenv("FFMPEG_PATH", "ffmpeg")
 
     # ---------- 便捷判断 ----------

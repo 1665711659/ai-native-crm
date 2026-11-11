@@ -1,5 +1,6 @@
 """Tornado API 接口层：统一响应格式 / 错误处理 / 路由注册。"""
 from app.handlers.agent_handler import AgentChatHandler
+from app.handlers.aigc_handler import AigcStatusHandler, AigcText2ImageHandler
 from app.handlers.base import BaseHandler, HealthHandler
 from app.handlers.customer_handler import (CustomerDetailHandler,
                                            CustomerListHandler,
@@ -14,4 +15,5 @@ __all__ = [
     "StatsHandler",
     "RAGQueryHandler", "RAGIndexHandler", "RAGDocumentListHandler",
     "AgentChatHandler", "WorkflowTriggerHandler",
+    "AigcText2ImageHandler", "AigcStatusHandler",
 ]

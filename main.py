@@ -25,7 +25,8 @@ from app.ai.rag.seed_docs import ensure_kb_seed  # noqa: E402
 from app.ai.rag.vector_store import NumpyVectorStore  # noqa: E402
 from app.ai.workflow.engine import WorkflowEngine  # noqa: E402
 from app.db.database import Database  # noqa: E402
-from app.handlers import (AgentChatHandler, CustomerDetailHandler,  # noqa: E402
+from app.handlers import (AgentChatHandler, AigcStatusHandler,  # noqa: E402
+                          AigcText2ImageHandler, CustomerDetailHandler,
                           CustomerListHandler, FollowUpListHandler, HealthHandler,
                           RAGDocumentListHandler, RAGIndexHandler, RAGQueryHandler,
                           StatsHandler, WorkflowTriggerHandler)
@@ -57,6 +58,10 @@ ROUTES = [
     (r"/api/customers/(\d+)", CustomerDetailHandler),
     (r"/api/customers/(\d+)/follow_ups", FollowUpListHandler),
     (r"/api/stats", StatsHandler),
+    # ---- AIGC（ComfyUI）----
+    (r"/api/aigc/text2image", AigcText2ImageHandler),
+    (r"/api/aigc/status", AigcStatusHandler),
+    (r"/aigc/(.*)", tornado.web.StaticFileHandler, {"path": Path(__file__).parent / "data" / "aigc"}),
     # ---- RAG 知识库 ----
     (r"/api/rag/query", RAGQueryHandler),
     (r"/api/rag/index", RAGIndexHandler),
